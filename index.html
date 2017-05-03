@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Float Label</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+    <div class="row">
+        <h2>Float Label Pattern Forms</h2>
+        <p class="lead">
+            This new pattern transforms Bootstrap's form fields into modern, fun and user-friendly experiences!<br />
+        </p>
+
+        <div class="alert alert-warning">
+            <h4>Missing SELECT Support</h4>
+            This feature does not currently support SELECT tags - I'm still working out a way to make them work with Bootstrap's native examples.
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-8">
+
+                <h4 class="page-header">Default Implementation</h4>
+                <form role="form">
+                    <div class="form-group float-label-control">
+                        <label for="">Username</label>
+                        <input type="email" class="form-control" placeholder="Username" name="someNewField">
+                    </div>
+                    <div class="form-group float-label-control">
+                        <label for="">Password</label>
+                        <input type="password" class="form-control" placeholder="Password" name="someNewPassowrd">
+                    </div>
+                    <div class="form-group float-label-control">
+                        <label for="">Textarea</label>
+                        <textarea class="form-control" placeholder="Textarea" rows="1"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Features
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li>Very customizable</li>
+                            <li>Works with Bootstrap's native form examples</li>
+                            <li>Uses CSS transitions for fallback browser support</li>
+                            <li>Placeholder override for labels when fields are empty</li>
+                            <li>Included authored jQuery plugin</li>
+                            <li>Optional bottom label positioning with the <code>.label-bottom</code> utility</li>
+                            <li>Works great with Chrome's AutoComplete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script type="text/javascript" src="floatLabel.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $('.float-label-control').floatLabels();
+    });
+</script>
+
+</body>
+</html>
