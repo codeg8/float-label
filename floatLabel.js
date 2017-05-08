@@ -17,7 +17,16 @@
 
             self.on('focusout', 'input, textarea', function () {
                 actions.removeFocus(this);
-            })
+            });
+
+            self.on('mousedown', '.select-dropdown li a', function(){
+                actions.selectValue(this);
+            });
+
+            self.on('keyup', 'select + input', function(){
+                actions.dropdownFilter(this);
+            });
+            
         }
 
 
@@ -28,8 +37,6 @@
                     var $this = $(this);
                     var $label = $this.children('label');
                     var $field = $this.find('input,textarea').first();
-
-                    // var $selectFields = $this.find('');
 
                     if ($this.children().first().is('label')) {
                         $this.children().first().remove();
@@ -47,8 +54,58 @@
                 });
             },
 
+            changeSelectFields: function () {
+                self.each(function () {
+                    var $this = $(this);
+                    // console.log($this);
+                    var $selectFields = $this.find('select');
+                    //console.log($selectFields.length);
+                    if ($selectFields.length){
+                        $selectFields.hide();
+                        $selectedFieldID = $selectFields.attr('id');
+                        $selectFields.after('<input type="text" class="form-control replaced-select-field" id="'+$selectedFieldID+'-styled">');
+                        $options = $selectFields.find('option');
+                        $styledElements = Array();
+                        $options.each(function($i, $option){
+                            $icon = $option.getAttribute('data-icon');
+                            $icon = ($icon) ? '<i class="'+ $icon +'"></i> '  : '';
+                            $html = '<li>'+
+                                        '<a href="#" data-option="'+$option.value+'">'+
+                                            $icon + $option.text
+                                        '</a>'+
+                                    '</li> '
+                            $styledElements.push($html);
+                        });
+                        $styledElements ='<ul class="dropdown-menu select-dropdown" id="'+$selectedFieldID+'-dropdown">' + $styledElements.join(' ') + '</ul>' ;
+                        $this.append($styledElements)
+                    }
+
+                });
+            },
+
+            selectValue: function(dropdown_elemet){
+                $dropdown_elemet = $(dropdown_elemet);
+                $relatedSelectFiled = $dropdown_elemet.parents('.select-dropdown').siblings('select');
+                $relatedInputFiled = $dropdown_elemet.parents('.select-dropdown').siblings('input');
+                $relatedSelectFiled.val($dropdown_elemet.data('option'));
+                $relatedInputFiled.val($.trim($dropdown_elemet.text()));
+            },
+
+            dropdownFilter: function(inputField){
+                $inputField = $(inputField);
+                $relatedDDField  = $inputField.siblings('.select-dropdown');
+                $options = $relatedDDField.find('a');
+                $options.each(function(i, option){
+                    $option = $(option);
+                    if($.trim($option.text().toLowerCase()).search($.trim($inputField.val()).toLowerCase()) === -1){
+                        $option.addClass('hide');
+                    }else{
+                        $option.removeClass('hide');
+                    }
+                });
+            },
+
             swapLabels: function (field) {
-                console.log('swapLabels Called');
                 var $field = $(field);
                 var $label = $(field).siblings('label').first();
                 var isEmpty = Boolean($field.val());
@@ -63,16 +120,17 @@
             },
 
             addFocus: function (field) {
-                console.log('addFocus Called');
                 var $field = $(field);
                 var $label = $(field).siblings('label').first();
                 // var isEmpty = Boolean($field.val());
                 $field.removeClass('empty');
                 $label.text($label.data('original-text'));
+                if($field.hasClass('replaced-select-field')){
+                    $field.siblings('ul.select-dropdown').addClass('show');
+                }
             },
 
             removeFocus: function (field) {
-                console.log('removeFocus Called');
                 var $field = $(field);
                 var $label = $(field).siblings('label').first();
                 var isEmpty = Boolean($field.val());
@@ -83,6 +141,9 @@
                      $field.addClass('empty');
                     $label.text($label.data('original-text'));
                 }
+                if($field.hasClass('replaced-select-field')){
+                    $field.siblings('ul.select-dropdown').removeClass('show');
+                }
             }
         };
 
@@ -92,6 +153,7 @@
             registerEventHandlers();
 
             actions.initialize();
+            actions.changeSelectFields();
             self.each(function () {
                 actions.swapLabels($(this).find('input,textarea').first());
             });
