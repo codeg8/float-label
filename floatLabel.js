@@ -163,3 +163,7 @@
         return this;
     };
 })(jQuery);
+
+$(function () {
+    $('.float-label-control').floatLabels();
+});
